@@ -8,15 +8,15 @@ sudo apt install -y pipx
 pipx install ectyper
 # Install bc and zip
 sudo apt install bc zip -y
+# Set up directory for executables
+test -d ~/bin || mkdir ~/bin
 # Install datasets & dataformat
 wget https://ftp.ncbi.nlm.nih.gov/pub/datasets/command-line/v2/linux-amd64/datasets
 chmod +x datasets
 mv datasets ~/bin
-https://ftp.ncbi.nlm.nih.gov/pub/datasets/command-line/v2/linux-amd64/dataformat
+wget https://ftp.ncbi.nlm.nih.gov/pub/datasets/command-line/v2/linux-amd64/dataformat
 chmod +x dataformat
 mv dataformat ~/bin
-# Set up directory for executables
-test -d bin || mkdir bin
 # Install Biobox
 git clone https://github.com/evolbioinf/biobox
 cd biobox

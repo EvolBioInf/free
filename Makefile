@@ -1,7 +1,7 @@
 all: aux data tutorial scripts/cli.sh
 aux:
 	make -C aux
-scripts/cli.sh: ../pangen/pg/cli.sh
+scripts/cli.sh:
 	cp ../pangen/pg/cli.sh scripts	
 data:
 	bash scripts/getData.sh
