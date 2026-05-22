@@ -1,0 +1,118 @@
+#+begin_export latex
+We write two scripts to assess the accuracy of \ty{phylonium}, one
+with uniform mutation rate, \ty{acc.sh}, and one with variable
+mutation rate, \ty{var.sh}.
+\section*{\ty{acc.sh}}
+Inside \ty{acc.sh} we iterate over mutation rates ranging from
+$10^{-4}$ to $0.2$. For each mutation rate we generate a pair of
+sequences, calculate their distance, and print this observed distance
+together with the expected distance.  \bpr{uniform.sh}{pr:acc}
+#+end_export
+#+begin_src sh <<acc.sh>>=
+  for m in 0.0001 0.0002 0.0005 0.001 0.002 \
+		  0.005 0.01 0.02 0.05 0.1 0.2 0.5; do
+      ranseq -l 5000000 > s1.fasta
+      #<<Generate pair of sequences, Pr. \ref{pr:acc}>>
+      #<<Calculate distance, Pr. \ref{pr:acc}>>
+      #<<Print observed and expected distance, Pr. \ref{pr:acc}>>
+  done
+#+end_src
+#+begin_export latex
+\epr
+We generate a pair of 5\,Mb sequences separated by the desired
+mutation rate. 
+#+end_export
+#+begin_src sh <<Generate pair of sequences, Pr. \ref{pr:acc}>>=
+  ranseq -l 5000000 > s1.fasta
+  mutator -m $m s1.fasta > s2.fasta
+#+end_src
+#+begin_export latex
+We use \ty{phylonium} to estimate the distance wile erasing its
+progress report.
+#+end_export
+#+begin_src sh <<Calculate distance, Pr. \ref{pr:acc}>>=
+  d=$(phylonium s*.fasta 2>/dev/null |
+	  tail -n 1 |
+	  awk '{print $2}')
+#+end_src
+#+begin_export latex
+We print the observed distance marked ``o'' and the expected distance
+marked ``e''.
+#+end_export
+#+begin_src sh <<Print observed and expected distance, Pr. \ref{pr:acc}>>=
+  printf "%f\t%f\to\n" $m $d
+  printf "%f\t%f\te\n" $m $m
+#+end_src
+#+begin_export latex
+\section*{\ty{var.sh}}
+To explore the effect of variable mutation rates, we again iterate
+over mutation rates ranging from $10^{-4}$ to $0.5$. For each mutation
+rate we generate a pair of sequences, calculate the distance as we did
+in \ty{acc.sh}, and print the observed and expected distance.
+\bpr{variable.sh}{pr:var}
+#+end_export
+#+begin_src sh <<var.sh>>=
+  for m in 0.0001 0.0002 0.0005 0.001 0.002 \
+		  0.005 0.01 0.02 0.05 0.1 0.2 0.5; do
+      ranseq -l 5000000 > s1.fasta
+      #<<Generate pair of sequences, Pr. \ref{pr:var}>>
+      #<<Calculate distance, Pr. \ref{pr:acc}>>
+      #<<Print observed and expected distance, Pr. \ref{pr:var}>>
+  done
+#+end_src
+#+begin_export latex
+\epr We stick with 5\,Mb sequences. To model the effect of variable
+mutation rates, we mutate 90\,\%, 4.5\,Mb, of the genome as before and
+leave the last 10\,\%, 500\,kb, unchanged.
+#+end_export
+#+begin_src sh <<Generate pair of sequences, Pr. \ref{pr:var}>>=
+  ranseq -l 5000000 > s1.fasta
+  cutSeq -r 1-4500000 s1.fasta |
+      mutator -m $m > s2.fasta
+  cutSeq -r 4501000-5000000 s1.fasta |
+      tail -n +2 >> s2.fasta
+#+end_src
+#+begin_export latex
+The expected distance is now 90\,\% of the mutation rate.
+#+end_export
+#+begin_src sh <<Print observed and expected distance, Pr. \ref{pr:var}>>=
+  printf "%f\t%f\to\n" $m $d
+  e=$(echo "$m * 0.9" | bc -l)
+  printf "%f\t%f\te\n" $m $e
+#+end_src
+#+begin_export latex
+\section*{\ty{rename.sh}}
+The program \ty{phylonium} uses the names of its input files as taxon
+labels. Unfortunately, the files downloaded with \ty{datasets} have
+unwieldy names like
+\begin{verbatim}
+GCF_040549715.1_ASM4054971v1_genomic.fna
+\end{verbatim}
+that make the trees calculated with \ty{phylonium} difficult to read.
+We would like to change the file names to taxon-ID followed by genome
+accession:
+\begin{verbatim}
+<taxid>_<accession>
+\end{verbatim}
+Since the above genome is from \emph{E. coli}, whose taxon-ID is 562,
+its file name would become
+\begin{verbatim}
+562_GCF_040549715.1
+\end{verbatim}
+In the Neighbors database the genome accessions are linked to
+taxon-IDs. So we iterate over the file names and from each file name
+we extract the genome accession. Using the genome accession, we get
+the corresponding taxon-ID from \ty{neidb}. Given the taxon-ID and the
+accession, we construct the new file name and link the original file
+to that name inside the directory \ty{all}.
+#+end_export
+#+begin_src sh <<rename.sh>>=
+  for file in $(ls ncbi_*/*/*/*.fna); do
+      acc=$(basename $file |
+		sed -E 's/(G.._[^_]+)_.*/\1/')
+      q="select taxid from genome where accession='$acc'"
+      tax=$(sqlite3 neidb "$q")
+      name="${tax}_${acc}"
+      ln -s $(pwd)/$file all/$name
+  done
+#+end_src
