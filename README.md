@@ -40,7 +40,8 @@ following the tutorial in our chapter. Change into this directory.
 ```
 cd tutorial
 ```
-For testing you can run the entire tutorial with one command.
+For testing you can run the entire tutorial with one command. If 
+ectyper was installed in a conda environment please load it before hand.
 ```
 bash ../scripts/cli.sh
 ```
