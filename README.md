@@ -2,11 +2,12 @@
 
 ## Description
 Companion site for the book chapter "Fast Phylogeny Reconstruction
-from Genomes of Closely Related Microbes" from the forthcoming third second
+from Genomes of Closely Related Microbes" from the forthcoming third
 edition of [*Bacterial
 Pangenomics*](https://link.springer.com/book/10.1007/978-1-0716-1099-2).
 
-## Bernhard Haubold, Fabian Klötzl, and Beatriz Vieira Mourato
+## Authors
+Bernhard Haubold, Fabian Klötzl, and Beatriz Vieira Mourato
 
 ## Setup Computer
 ### Ubuntu
@@ -34,7 +35,7 @@ Run
 make
 ```
 This generates the directory `tutorial` with the scripts and data for
-following the tutorial in this chapter.
+following the tutorial in our chapter.
 
 ## License
 [GNU General Public License](https://www.gnu.org/licenses/gpl.html)
