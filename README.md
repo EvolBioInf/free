@@ -11,11 +11,12 @@ Bernhard Haubold, Fabian Klötzl, and Beatriz Vieira Mourato
 
 ## Setup Computer
 ### Ubuntu
-Run
+- Run
 ```
 bash scripts/setup.sh
 source ~/.profile
 ```
+- Install [`ectyper`](https://github.com/phac-nml/ecoli_serotyping)
 ### Other Systems
 We currently only provide a setup script for Ubuntu. However, that
 setup script (`scripts/setup.sh`) should give you a good idea of
@@ -41,7 +42,7 @@ following the tutorial in our chapter. Change into this directory.
 cd tutorial
 ```
 For testing you can run the entire tutorial with one command. If 
-ectyper was installed in a conda environment please load it before hand.
+`ectyper` was installed in a conda environment, please load it beforehand.
 ```
 bash ../scripts/cli.sh
 ```
