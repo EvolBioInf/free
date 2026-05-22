@@ -14,6 +14,7 @@ Bernhard Haubold, Fabian Klötzl, and Beatriz Vieira Mourato
 Run
 ```
 bash scripts/setup.sh
+source ~/.profile
 ```
 ### Other Systems
 We currently only provide a setup script for Ubuntu. However, that
@@ -35,7 +36,14 @@ Run
 make
 ```
 This generates the directory `tutorial` with the scripts and data for
-following the tutorial in our chapter.
+following the tutorial in our chapter. Change into this directory.
+```
+cd tutorial
+```
+For testing you can run the entire tutorial with one command.
+```
+bash ../scripts/cli.sh
+```
 
 ## License
 [GNU General Public License](https://www.gnu.org/licenses/gpl.html)

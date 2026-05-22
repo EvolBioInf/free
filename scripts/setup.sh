@@ -34,5 +34,3 @@ bash scripts/setup.sh
 make
 ln -s $(pwd)/bin/* ~/bin
 cd ../
-# Setup path
-source ~/.profile
