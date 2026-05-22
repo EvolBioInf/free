@@ -4,10 +4,13 @@ sudo apt upgrade -y
 # Install phylonium
 sudo apt install -y phylonium
 # Install ectyper
-sudo apt install -y pipx
-pipx install ectyper
-# Install bc and zip
-sudo apt install bc zip -y
+wget https://repo.continuum.io/miniconda/Miniconda3-latest-Linux-x86_64.sh -O miniconda.sh
+bash miniconda.sh -b -p $HOME/miniconda
+echo ". $HOME/miniconda/etc/profile.d/conda.sh" >> ~/.bashrc
+source ~/.bashrc
+conda install -c bioconda ectyper
+# Install bc, wget, and zip
+sudo apt install bc wget zip -y
 # Set up directory for executables
 test -d ~/bin || mkdir ~/bin
 # Install datasets & dataformat
