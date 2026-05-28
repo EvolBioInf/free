@@ -1,7 +1,7 @@
 #+begin_export latex
 We write two scripts to assess the accuracy of \ty{phylonium}, one
-with uniform mutation rate, \ty{acc.sh}, and one with variable
-mutation rate, \ty{var.sh}.
+with uniform mutation rate, \ty{acc.sh}, and one with non-uniform
+mutation rate, \ty{nu.sh}.
 \section*{\ty{acc.sh}}
 Inside \ty{acc.sh} we iterate over mutation rates ranging from
 $10^{-4}$ to $0.2$. For each mutation rate we generate a pair of
@@ -44,28 +44,28 @@ marked ``e''.
   printf "%f\t%f\te\n" $m $m
 #+end_src
 #+begin_export latex
-\section*{\ty{var.sh}}
-To explore the effect of variable mutation rates, we again iterate
+\section*{\ty{nu.sh}}
+To explore the effect of non-uniform mutation rates, we again iterate
 over mutation rates ranging from $10^{-4}$ to $0.5$. For each mutation
 rate we generate a pair of sequences, calculate the distance as we did
 in \ty{acc.sh}, and print the observed and expected distance.
-\bpr{variable.sh}{pr:var}
+\bpr{nu.sh}{pr:nu}
 #+end_export
-#+begin_src sh <<var.sh>>=
+#+begin_src sh <<nu.sh>>=
   for m in 0.0001 0.0002 0.0005 0.001 0.002 \
 		  0.005 0.01 0.02 0.05 0.1 0.2 0.5; do
       ranseq -l 5000000 > s1.fasta
-      #<<Generate pair of sequences, Pr. \ref{pr:var}>>
+      #<<Generate pair of sequences, Pr. \ref{pr:nu}>>
       #<<Calculate distance, Pr. \ref{pr:acc}>>
-      #<<Print observed and expected distance, Pr. \ref{pr:var}>>
+      #<<Print observed and expected distance, Pr. \ref{pr:nu}>>
   done
 #+end_src
 #+begin_export latex
-\epr We stick with 5\,Mb sequences. To model the effect of variable
+\epr We stick with 5\,Mb sequences. To model the effect of non-uniform
 mutation rates, we mutate 90\,\%, 4.5\,Mb, of the genome as before and
 leave the last 10\,\%, 500\,kb, unchanged.
 #+end_export
-#+begin_src sh <<Generate pair of sequences, Pr. \ref{pr:var}>>=
+#+begin_src sh <<Generate pair of sequences, Pr. \ref{pr:nu}>>=
   ranseq -l 5000000 > s1.fasta
   cutSeq -r 1-4500000 s1.fasta |
       mutator -m $m > s2.fasta
@@ -75,7 +75,7 @@ leave the last 10\,\%, 500\,kb, unchanged.
 #+begin_export latex
 The expected distance is now 90\,\% of the mutation rate.
 #+end_export
-#+begin_src sh <<Print observed and expected distance, Pr. \ref{pr:var}>>=
+#+begin_src sh <<Print observed and expected distance, Pr. \ref{pr:nu}>>=
   printf "%f\t%f\to\n" $m $d
   e=$(echo "$m * 0.9" | bc -l)
   printf "%f\t%f\te\n" $m $e
