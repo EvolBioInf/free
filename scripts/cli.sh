@@ -2,7 +2,9 @@ ranseq -l 5000000 > s1.fasta
 mutator s1.fasta > s2.fasta
 phylonium s1.fasta s2.fasta
 bash acc.sh > acc.dat
-bash var.sh > var.dat
+plotLine -x u -y "<u>" -L acc.dat
+bash nu.sh > nu.dat
+plotLine -x u -y "<u>" -L nu.dat
 taxi O16:H48 neidb
 neighbors -t 2605619 -L complete -o -l neidb |
     tail -n +2 |
